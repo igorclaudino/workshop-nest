@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Teviweet {
+  id                String         @id @default(uuid())
+  textBody          String
+  user              String
+  reteviweetId      String?
+  reteviweet        Teviweet?      @relation("Reteviweet", fields: [reteviweetId], references: [id])
+  reteviweets       Teviweet[]     @relation("Reteviweet")
+  commentTeviweetId String?
+  commentTeviweet   Teviweet?      @relation("Comments", fields: [commentTeviweetId], references: [id])
+  comments          Teviweet[]     @relation("Comments")
+  likes             TeviweetLike[]
+}
+
+model TeviweetLike {
+  id         String   @id @default(uuid())
+  user       String
+  teviweet   Teviweet @relation(fields: [teviweetId], references: [id])
+  teviweetId String
+}
